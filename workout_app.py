@@ -17,6 +17,7 @@ normalize = {
     "traps": "Trapezius", "trap": "Trapezius",
     "forearm": "Forearms", "forearms": "Forearms",
     "abs": "Abdominals", "core": "Abdominals",
+    "midback": "Midback", "midback": "Mid back",
 }
 
 st.title("🏋️ Workout Log Parser")
@@ -41,3 +42,4 @@ if st.button("Process"):
             st.write(f"**{muscle}**: {total}")
     else:
         st.info("No muscle data found. Make sure your lines look like `3 x biceps` or `1.5 x glutes`.")
+
