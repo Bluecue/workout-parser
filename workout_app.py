@@ -19,20 +19,29 @@ normalize = {
     "abs": "Abdominals", "core": "Abdominals",
     "midback": "Midback", "midback": "Mid back",
 }
-
-st.title("🏋️ Workout Log Parser")
-
 raw_text = st.text_area("Paste your workout log here:")
 
 if st.button("Process"):
     muscle_totals = defaultdict(float)
-    pattern = re.compile(r"([\d\.]+)\s*x\s*(.+)", re.I)
+
+    # Regex matches both "3 x biceps" and "biceps x 3"
+    pattern = re.compile(r"(?:(\d+(?:\.\d+)?)\s*[xX]\s*(.+)|(.+)\s*[xX]\s*(\d+(?:\.\d+)?))")
 
     for line in raw_text.splitlines():
-        match = pattern.match(line.strip())
+        line = line.strip()
+        if not line:
+            continue
+        match = pattern.match(line)
         if match:
-            sets = float(match.group(1))
-            muscle = match.group(2).lower().strip()
+            # Determine which pattern matched
+            if match.group(1):  # number first
+                sets = float(match.group(1))
+                muscle = match.group(2).strip().lower()
+            else:  # muscle first
+                muscle = match.group(3).strip().lower()
+                sets = float(match.group(4))
+
+            # Normalize muscle name
             muscle = normalize.get(muscle, muscle.title())
             muscle_totals[muscle] += sets
 
@@ -41,5 +50,5 @@ if st.button("Process"):
         for muscle, total in sorted(muscle_totals.items()):
             st.write(f"**{muscle}**: {total}")
     else:
-        st.info("No muscle data found. Make sure your lines look like `3 x biceps` or `1.5 x glutes`.")
+        st.info("No muscle data found. Make sure your lines look like `3 x biceps` or `front delts x 3`.")
 
