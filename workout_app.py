@@ -25,7 +25,9 @@ if st.button("Process"):
     muscle_totals = defaultdict(float)
 
     # Regex matches both "3 x biceps" and "biceps x 3"
-    pattern = re.compile(r"(?:(\d+(?:\.\d+)?)\s*[xX]\s*(.+)|(.+)\s*[xX]\s*(\d+(?:\.\d+)?))")
+    pattern = re.compile(
+    r"(?:(\d+(?:\.\d+)?)\s*[xX:]\s*(.+)|(.+)\s*[xX:]\s*(\d+(?:\.\d+)?))"
+    )
 
     for line in raw_text.splitlines():
         line = line.strip()
@@ -51,5 +53,6 @@ if st.button("Process"):
             st.write(f"**{muscle}** x {total}")
     else:
         st.info("No muscle data found. Make sure your lines look like `3 x biceps` or `front delts x 3`.")
+
 
 
