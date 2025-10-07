@@ -48,7 +48,8 @@ if st.button("Process"):
     st.subheader("Muscle Summary")
     if muscle_totals:
         for muscle, total in sorted(muscle_totals.items()):
-            st.write(f"**{muscle}**: {total}")
+            st.write(f"**{muscle}** x {total}")
     else:
         st.info("No muscle data found. Make sure your lines look like `3 x biceps` or `front delts x 3`.")
+
 
