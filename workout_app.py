@@ -17,8 +17,10 @@ normalize = {
     "traps": "Trapezius", "trap": "Trapezius",
     "forearm": "Forearms", "forearms": "Forearms",
     "abs": "Abdominals", "core": "Abdominals",
-    "midback": "Midback", "midback": "Mid back",
+    "midback": "Midback", "mid back": "Midback",
 }
+valid_muscles = set(normalize.values())
+
 raw_text = st.text_area("Paste your workout log here:")
 
 if st.button("Process"):
@@ -26,7 +28,7 @@ if st.button("Process"):
 
     # Regex matches both "3 x biceps" and "biceps x 3"
     pattern = re.compile(
-    r"(?:(\d+(?:\.\d+)?)\s*[xX:]\s*(.+)|(.+)\s*[xX:]\s*(\d+(?:\.\d+)?))"
+        r"(?:(\d+(?:\.\d+)?)\s*[xX:]\s*([a-zA-Z ]+)$|^([a-zA-Z ]+)\s*[xX:]\s*(\d+(?:\.\d+)?)$)"
     )
 
     for line in raw_text.splitlines():
@@ -35,17 +37,15 @@ if st.button("Process"):
             continue
         match = pattern.match(line)
         if match:
-            # Determine which pattern matched
             if match.group(1):  # number first
                 sets = float(match.group(1))
-                muscle = match.group(2).strip().lower()
+                muscle_key = match.group(2).strip().lower()
             else:  # muscle first
-                muscle = match.group(3).strip().lower()
+                muscle_key = match.group(3).strip().lower()
                 sets = float(match.group(4))
-
-            # Normalize muscle name
-            muscle = normalize.get(muscle, muscle.title())
-            muscle_totals[muscle] += sets
+            muscle = normalize.get(muscle_key)
+            if muscle and muscle in valid_muscles:
+                muscle_totals[muscle] += sets
 
     st.subheader("Muscle Summary")
     if muscle_totals:
@@ -53,6 +53,3 @@ if st.button("Process"):
             st.write(f"**{muscle}** x {total}")
     else:
         st.info("No muscle data found. Make sure your lines look like `3 x biceps` or `front delts x 3`.")
-
-
-
