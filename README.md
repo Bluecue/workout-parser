@@ -1,6 +1,7 @@
 # workout-parser Python application
 > Copy and paste plaintext workout logs generated from Strong Workout Tracker app on android to get sets broken down by muscle group.
-
+## Usage
+Go to https://jaggersworkoutapp.streamlit.app/ and input strong workout app text workout informaiton obtained through exporting a completed workout within the android application.
 ## Input Text Formatting
 It is important that the copy-pasted text have some where in it this format  
  "number of sets for muscle group" x "muscle-group"
